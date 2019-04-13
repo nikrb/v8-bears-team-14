@@ -26,6 +26,9 @@ import CartDrawerContent from '../../components/CartDrawer/CartDrawerContent';
 import Error from '../../components/Error/Error';
 import CountryPicker from './CountryPicker';
 import FirstNameField from './FirstNameField';
+import LastNameField from './LastNameField';
+import EmailField from './EmailField';
+import PhoneField from './PhoneField';
 
 import {
   Wrapper,
@@ -262,7 +265,10 @@ class StripeForm extends Component {
       CVC_number,
       disable,
       first_name,
+      email,
+      last_name,
       orderComplete,
+      phone,
       stripe_errors,
       zip_code,
       backend_validation_errors,
@@ -327,45 +333,25 @@ class StripeForm extends Component {
                   />
                 </Grid>
                 <Grid item xs={12} sm={6}>
-                  <TextField
-                    id="last_name"
-                    label="Last name"
-                    type="text"
-                    onChange={this.handleChange('last_name')}
-                    margin="dense"
-                    fullWidth
-                    required
-                    error={backend_validation_errors.some(
-                      err => err.param === 'additional.last_name'
-                    )}
-                    InputLabelProps={{ required: false }}
-                    helperText={this.isNotValid('additional.last_name')}
+                  <LastNameField
+                    backend_validation_errors={backend_validation_errors}
+                    handleChange={this.handleChange('last_name')}
+                    isNotValid={this.isNotValid}
+                    value={last_name}
                   />
                 </Grid>
                 <Grid item xs={12} sm={6}>
-                  <TextField
-                    id="email"
-                    label="Email address"
-                    type="email"
-                    onChange={this.handleChange('email')}
-                    margin="dense"
-                    fullWidth
-                    required
-                    error={backend_validation_errors.some(
-                      err => err.param === 'additional.email'
-                    )}
-                    InputLabelProps={{ required: false }}
-                    helperText={this.isNotValid('additional.email')}
+                  <EmailField
+                    backend_validation_errors={backend_validation_errors}
+                    handleChange={this.handleChange('email')}
+                    isNotValid={this.isNotValid}
+                    value={email}
                   />
                 </Grid>
                 <Grid item xs={12} sm={6}>
-                  <TextField
-                    id="phone"
-                    label="Phone number (optional)"
-                    type="tel"
-                    onChange={this.handleChange('phone')}
-                    margin="dense"
-                    fullWidth
+                  <PhoneField
+                    handleChange={this.handleChange('phone')}
+                    value={phone}
                   />
                 </Grid>
                 <Grid item xs={12}>
