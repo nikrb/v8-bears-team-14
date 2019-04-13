@@ -29,6 +29,7 @@ import FirstNameField from './FirstNameField';
 import LastNameField from './LastNameField';
 import EmailField from './EmailField';
 import PhoneField from './PhoneField';
+import AddressField from './AddressField';
 
 import {
   Wrapper,
@@ -259,6 +260,7 @@ class StripeForm extends Component {
 
   render() {
     const {
+      address1,
       card_expiration,
       card_number,
       country,
@@ -355,20 +357,11 @@ class StripeForm extends Component {
                   />
                 </Grid>
                 <Grid item xs={12}>
-                  <TextField
-                    id="address1"
-                    label="Address"
-                    type="text"
-                    onChange={this.handleChange('address1')}
-                    margin="dense"
-                    fullWidth
-                    required
-                    InputLabelProps={{ required: false }}
-                    error={backend_validation_errors.some(
-                      err => err.param === 'additional.address1'
-                    )}
-                    helperText={this.isNotValid('additional.address1')}
-                    // helperText={null}
+                  <AddressField
+                    backend_validation_errors={backend_validation_errors}
+                    handleChange={this.handleChange('address1')}
+                    isNotValid={this.isNotValid}
+                    value={address1}
                   />
                 </Grid>
                 <Grid item xs={12}>
