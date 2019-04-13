@@ -31,6 +31,7 @@ import EmailField from './EmailField';
 import PhoneField from './PhoneField';
 import AddressField from './AddressField';
 import CityField from './CityField';
+import AdditionalInfoField from './AdditionalInfoField';
 
 import {
   Wrapper,
@@ -261,6 +262,7 @@ class StripeForm extends Component {
 
   render() {
     const {
+      additional_info,
       address1,
       card_expiration,
       card_number,
@@ -432,17 +434,9 @@ class StripeForm extends Component {
                   />
                 </Grid>
                 <Grid item xs={12}>
-                  <TextField
-                    fullWidth
-                    id="additional_info"
-                    InputLabelProps={{ required: false }}
-                    label="Additional information (optional)"
-                    margin="dense"
-                    multiline
-                    onChange={this.handleChange('additional_info')}
-                    placeholder="Anything else you would like to add"
-                    rows={4}
-                    type="text"
+                  <AdditionalInfoField
+                    handleChange={this.handleChange('additional_info')}
+                    value={additional_info}
                   />
                 </Grid>
               </Grid>
