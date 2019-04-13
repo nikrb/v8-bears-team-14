@@ -1,37 +1,18 @@
 /* eslint-disable camelcase */
 import React, { Component } from 'react';
 import axios from 'axios';
-import {
-  CardExpiryElement,
-  CardCVCElement,
-  PostalCodeElement,
-  CardNumberElement
-} from 'react-stripe-elements';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import {
-  withWidth,
-  Typography,
-  TextField,
-  Paper,
-  Button,
-  Grid
-} from '@material-ui/core';
+import { withWidth, Typography, Paper, Button, Grid } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 
-import StripeElementWrapper from './StripeElementWrapper';
 import { clearCart, clearBuyItNow } from '../../store/actions';
 import { cartHelper } from '../../util/helpers';
 import CartDrawerContent from '../../components/CartDrawer/CartDrawerContent';
 import Error from '../../components/Error/Error';
-import CountryPicker from './CountryPicker';
-import FirstNameField from './FirstNameField';
-import LastNameField from './LastNameField';
-import EmailField from './EmailField';
-import PhoneField from './PhoneField';
-import AddressField from './AddressField';
-import CityField from './CityField';
 import AdditionalInfoField from './AdditionalInfoField';
+import CustomerOrderDetailForm from './CustomerOrderDetailForm';
+import StripeDetailForm from './StripeDetailForm';
 
 import {
   Wrapper,
@@ -145,13 +126,14 @@ class StripeForm extends Component {
 
   handleSubmit = ev => {
     ev.preventDefault();
+    const { stripe_errors } = this.state;
     const {
       stripe,
       clearCart: clearCartRedux,
       clearBuyItNow: clearBuyItNowRedux
     } = this.props;
 
-    if (!this.isStripesInputsOk() || this.stripe_errors) return;
+    if (!this.isStripesInputsOk() || stripe_errors) return;
     this.setState(() => ({ disable: true }));
     if (stripe) {
       const {
@@ -263,58 +245,13 @@ class StripeForm extends Component {
   render() {
     const {
       additional_info,
-      address1,
-      card_expiration,
-      card_number,
-      city,
-      country,
-      CVC_number,
       disable,
-      first_name,
-      email,
-      last_name,
       orderComplete,
-      phone,
-      stripe_errors,
-      zip_code,
       backend_validation_errors,
       isClient
     } = this.state;
 
     const { classes, stripe, width, cart } = this.props;
-
-    let cardNumberError = null;
-    if (card_number.error) {
-      cardNumberError = card_number.error;
-    } else if (stripe_errors) {
-      if (card_number.empty) {
-        cardNumberError = `Your card's number is blank`;
-      }
-    }
-    let postCodeError = null;
-    if (zip_code.error) {
-      postCodeError = zip_code.error;
-    } else if (stripe_errors) {
-      if (zip_code.empty) {
-        postCodeError = `Your card's postal code is blank.`;
-      }
-    }
-    let cvcError = null;
-    if (CVC_number.error) {
-      cvcError = CVC_number.error;
-    } else if (stripe_errors) {
-      if (CVC_number.empty) {
-        cvcError = `Your card's security number is blank.`;
-      }
-    }
-    let cardExpiryError = null;
-    if (card_expiration.error) {
-      cardExpiryError = card_expiration.error;
-    } else if (stripe_errors) {
-      if (card_expiration.empty) {
-        cardExpiryError = `Your card's expiration day is blank.`;
-      }
-    }
 
     const purchase = orderComplete ? (
       <p>Purchase Complete.</p>
@@ -330,109 +267,15 @@ class StripeForm extends Component {
                     .map((error, i) => <Error key={i}>{error.msg}</Error>)
                 : null}
               <Grid container spacing={16}>
-                <Grid item xs={12} sm={6}>
-                  <FirstNameField
-                    backend_validation_errors={backend_validation_errors}
-                    handleChange={this.handleChange('first_name')}
-                    isNotValid={this.isNotValid}
-                    value={first_name}
-                  />
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                  <LastNameField
-                    backend_validation_errors={backend_validation_errors}
-                    handleChange={this.handleChange('last_name')}
-                    isNotValid={this.isNotValid}
-                    value={last_name}
-                  />
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                  <EmailField
-                    backend_validation_errors={backend_validation_errors}
-                    handleChange={this.handleChange('email')}
-                    isNotValid={this.isNotValid}
-                    value={email}
-                  />
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                  <PhoneField
-                    handleChange={this.handleChange('phone')}
-                    value={phone}
-                  />
-                </Grid>
-                <Grid item xs={12}>
-                  <AddressField
-                    backend_validation_errors={backend_validation_errors}
-                    handleChange={this.handleChange('address1')}
-                    isNotValid={this.isNotValid}
-                    value={address1}
-                  />
-                </Grid>
-                <Grid item xs={12}>
-                  <TextField
-                    id="address2"
-                    label="Apartment, suite, etc. (optional)"
-                    type="text"
-                    onChange={this.handleChange('address2')}
-                    margin="dense"
-                    fullWidth
-                  />
-                </Grid>
-
-                <Grid item xs={12} sm={6}>
-                  <CountryPicker
-                    backend_validation_errors={backend_validation_errors}
-                    country={country}
-                    handleChange={this.handleChange('country')}
-                    isNotValid={this.isNotValid}
-                  />
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                  <CityField
-                    backend_validation_errors={backend_validation_errors}
-                    handleChange={this.handleChange('city')}
-                    isNotValid={this.isNotValid}
-                    value={city}
-                  />
-                </Grid>
-
-                <Grid item xs={12} sm={6}>
-                  <StripeElementWrapper
-                    label="Card Number"
-                    placeholder="1234 1234 1234 1234"
-                    component={CardNumberElement}
-                    name="card_number"
-                    onChange={this.handleStripeChange}
-                    error={cardNumberError}
-                  />
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                  <StripeElementWrapper
-                    label="Expiry (MM / YY)"
-                    component={CardExpiryElement}
-                    name="card_expiration"
-                    onChange={this.handleStripeChange}
-                    error={cardExpiryError}
-                  />
-                </Grid>
-                <Grid item xs={6}>
-                  <StripeElementWrapper
-                    label="CVC"
-                    component={CardCVCElement}
-                    name="CVC_number"
-                    onChange={this.handleStripeChange}
-                    error={cvcError}
-                  />
-                </Grid>
-                <Grid item xs={6}>
-                  <StripeElementWrapper
-                    component={PostalCodeElement}
-                    error={postCodeError}
-                    label="Postal / ZIP code"
-                    name="zip_code"
-                    onChange={this.handleStripeChange}
-                  />
-                </Grid>
+                <CustomerOrderDetailForm
+                  handleChange={this.handleChange}
+                  isNotValid={this.isNotValid}
+                  customerOrderDetail={this.state}
+                />
+                <StripeDetailForm
+                  data={this.state}
+                  handleStripeChange={this.handleStripeChange}
+                />
                 <Grid item xs={12}>
                   <AdditionalInfoField
                     handleChange={this.handleChange('additional_info')}
