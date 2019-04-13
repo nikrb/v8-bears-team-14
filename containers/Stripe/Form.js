@@ -25,6 +25,7 @@ import { cartHelper } from '../../util/helpers';
 import CartDrawerContent from '../../components/CartDrawer/CartDrawerContent';
 import Error from '../../components/Error/Error';
 import CountryPicker from './CountryPicker';
+import FirstNameField from './FirstNameField';
 
 import {
   Wrapper,
@@ -318,20 +319,11 @@ class StripeForm extends Component {
                 : null}
               <Grid container spacing={16}>
                 <Grid item xs={12} sm={6}>
-                  <TextField
-                    id="first_name"
-                    label="First name"
-                    type="text"
-                    onChange={this.handleChange('first_name')}
+                  <FirstNameField
+                    backend_validation_errors={backend_validation_errors}
+                    handleChange={this.handleChange('first_name')}
+                    isNotValid={this.isNotValid}
                     value={first_name}
-                    margin="dense"
-                    required
-                    fullWidth
-                    InputLabelProps={{ required: false }} // to get rid of asterisk
-                    error={backend_validation_errors.some(
-                      err => err.param === 'additional.first_name'
-                    )}
-                    helperText={this.isNotValid('additional.first_name')}
                   />
                 </Grid>
                 <Grid item xs={12} sm={6}>
