@@ -13,6 +13,7 @@ import Error from '../../components/Error/Error';
 import AdditionalInfoField from './AdditionalInfoField';
 import CustomerOrderDetailForm from './CustomerOrderDetailForm';
 import StripeDetailForm from './StripeDetailForm';
+import PaymentFailureSegment from './PaymentFailureSegment';
 
 import {
   Wrapper,
@@ -304,14 +305,7 @@ class StripeForm extends Component {
 
     const { error } = this.state;
     if (error) {
-      return (
-        <div>
-          <div>
-            We cannot process your payment. Please check your payment details
-            and try again.
-          </div>
-        </div>
-      );
+      return <PaymentFailureSegment />;
     }
     const { buyItNowItem } = this.props;
     const buyItNow = Object.prototype.hasOwnProperty.call(buyItNowItem, 'name');
