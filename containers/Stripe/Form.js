@@ -30,6 +30,7 @@ import LastNameField from './LastNameField';
 import EmailField from './EmailField';
 import PhoneField from './PhoneField';
 import AddressField from './AddressField';
+import CityField from './CityField';
 
 import {
   Wrapper,
@@ -263,6 +264,7 @@ class StripeForm extends Component {
       address1,
       card_expiration,
       card_number,
+      city,
       country,
       CVC_number,
       disable,
@@ -384,19 +386,11 @@ class StripeForm extends Component {
                   />
                 </Grid>
                 <Grid item xs={12} sm={6}>
-                  <TextField
-                    id="city"
-                    label="City"
-                    type="text"
-                    onChange={this.handleChange('city')}
-                    margin="dense"
-                    fullWidth
-                    required
-                    InputLabelProps={{ required: false }}
-                    error={backend_validation_errors.some(
-                      err => err.param === 'additional.city'
-                    )}
-                    helperText={this.isNotValid('additional.city')}
+                  <CityField
+                    backend_validation_errors={backend_validation_errors}
+                    handleChange={this.handleChange('city')}
+                    isNotValid={this.isNotValid}
+                    value={city}
                   />
                 </Grid>
 
