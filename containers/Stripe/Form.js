@@ -1,19 +1,19 @@
 /* eslint-disable camelcase */
 import React, { Component } from 'react';
-import axios from 'axios';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { withWidth, Typography, Paper, Button, Grid } from '@material-ui/core';
+import { withWidth, Typography, Paper, Grid } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 
 import { clearCart, clearBuyItNow } from '../../store/actions';
-import { cartHelper } from '../../util/helpers';
 import CartDrawerContent from '../../components/CartDrawer/CartDrawerContent';
 import Error from '../../components/Error/Error';
 import AdditionalInfoField from './AdditionalInfoField';
 import CustomerOrderDetailForm from './CustomerOrderDetailForm';
 import StripeDetailForm from './StripeDetailForm';
 import PaymentFailureSegment from './PaymentFailureSegment';
+import { attemptPayment } from './actions';
+import BuyButton from './BuyButton';
 
 import {
   Wrapper,
@@ -137,93 +137,35 @@ class StripeForm extends Component {
     if (!this.isStripesInputsOk() || stripe_errors) return;
     this.setState(() => ({ disable: true }));
     if (stripe) {
-      const {
-        first_name,
-        last_name,
-        address1,
-        address2,
-        city,
-        country
-      } = this.state;
-      stripe
-        .createToken({
-          name: `${first_name} ${last_name}`,
-          address_line1: address1,
-          address_line2: address2,
-          address_city: city,
-          address_country: country
-        })
-        .then(payload => {
-          const { email, phone, additional_info } = this.state;
-          const { buyItNowItem, shippingCost, cart } = this.props;
-
-          let purchaseDetails;
-          if (Object.prototype.hasOwnProperty.call(buyItNowItem, 'name')) {
-            console.log('is buyitnow pirko');
-            purchaseDetails = {
-              ...buyItNowItem,
-              shippingCost,
-              boughtFrom: 'buyItNow'
-            };
-          } else {
-            console.log('is cart pirko');
-            const selectedItems = cart;
-            const totalItems = cartHelper.totalItems(cart);
-            const totalPrice = cartHelper.totalPrice(cart);
-            purchaseDetails = {
-              selectedItems,
-              totalItems,
-              totalPrice,
-              boughtFrom: 'cart',
-              shippingCost
-            };
-          }
-          axios
-            .post('http://localhost:3000/api/charge', {
-              token: payload.token.id,
-              payload,
-              additional: {
-                email,
-                first_name,
-                last_name,
-                phone,
-                address1,
-                address2,
-                city,
-                additional_info,
-                country,
-                purchaseDetails
-              }
-            })
-            .then(res => {
-              // backend did not validate form
-              if (res.data.errors) {
-                console.log(res.data.errors);
-                console.log('terminatinu?');
-                this.setState({
-                  // backend_validation_errors: { ...res.data.errors },
-                  backend_validation_errors: res.data.errors,
-                  disable: false
-                });
-
-                return;
-              }
-              if (res.status === 200) {
-                console.log('Purchase completed successfully');
-                this.setState(() => ({ orderComplete: true }));
-                // empty redux state
-                clearCartRedux();
-                clearBuyItNowRedux();
-                console.log('its ok ', res);
-              }
-            })
-            .catch(err => {
-              console.log('its not ok ', err.response);
-              console.log(err);
-              console.log(err.errors);
-
-              this.setState(() => ({ error: true }));
+      attemptPayment({ ...this.state, ...this.props, stripe })
+        .then(res => {
+          // backend did not validate form
+          if (res.data.errors) {
+            console.log(res.data.errors);
+            console.log('terminatinu?');
+            this.setState({
+              // backend_validation_errors: { ...res.data.errors },
+              backend_validation_errors: res.data.errors,
+              disable: false
             });
+
+            return;
+          }
+          if (res.status === 200) {
+            console.log('Purchase completed successfully');
+            this.setState(() => ({ orderComplete: true }));
+            // empty redux state
+            clearCartRedux();
+            clearBuyItNowRedux();
+            console.log('its ok ', res);
+          }
+        })
+        .catch(err => {
+          console.log('its not ok ', err.response);
+          console.log(err);
+          console.log(err.errors);
+
+          this.setState(() => ({ error: true }));
         });
     } else {
       console.log('Form submitted before Stripe.js loaded.');
@@ -286,16 +228,10 @@ class StripeForm extends Component {
               </Grid>
               <br />
               <CenterButton>
-                <Button
-                  color="secondary"
+                <BuyButton
                   disabled={!stripe || disable}
                   fullWidth={width === 'xs'}
-                  size="large"
-                  type="submit"
-                  variant="contained"
-                >
-                  Buy
-                </Button>
+                />
               </CenterButton>
             </form>
           </FormWrapper>
@@ -346,6 +282,7 @@ const mapDispatchToProps = dispatch => ({
 StripeForm.propTypes = {
   buyItNowItem: PropTypes.object,
   classes: PropTypes.object.isRequired,
+  // eslint-disable-next-line react/no-unused-prop-types
   shippingCost: PropTypes.number,
   stripe: PropTypes.object,
   width: PropTypes.string,
