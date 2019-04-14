@@ -73,6 +73,7 @@ class StripeForm extends Component {
     this.setState({ isClient: true });
   }
 
+  /* TODO: this prevents text field updates?
   shouldComponentUpdate(nextProps, nextState) {
     const {
       first_name,
@@ -101,6 +102,7 @@ class StripeForm extends Component {
     }
     return true;
   }
+  */
 
   handleChange = name => event => {
     this.setState({
