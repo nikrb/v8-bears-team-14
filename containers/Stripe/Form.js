@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { withWidth, Typography, Paper, Grid } from '@material-ui/core';
+import { Typography, Paper, Grid } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 
 import { clearCart, clearBuyItNow } from '../../store/actions';
@@ -33,6 +33,11 @@ const styles = theme => ({
       marginTop: theme.spacing.unit * 6,
       marginBottom: theme.spacing.unit * 6,
       padding: theme.spacing.unit * 3
+    }
+  },
+  fullWidth: {
+    [theme.breakpoints.down('xs')]: {
+      width: '100%'
     }
   }
 });
@@ -66,6 +71,35 @@ class StripeForm extends Component {
 
   componentDidMount() {
     this.setState({ isClient: true });
+  }
+
+  shouldComponentUpdate(nextProps, nextState) {
+    const {
+      first_name,
+      last_name,
+      email,
+      phone,
+      address1,
+      address2,
+      country,
+      city,
+      additional_info
+    } = this.state;
+
+    if (
+      first_name !== nextState.first_name ||
+      last_name !== nextState.last_name ||
+      email !== nextState.email ||
+      phone !== nextState.phone ||
+      address1 !== nextState.address1 ||
+      address2 !== nextState.address2 ||
+      country !== nextState.country ||
+      city !== nextState.city ||
+      additional_info !== nextState.additional_info
+    ) {
+      return false;
+    }
+    return true;
   }
 
   handleChange = name => event => {
@@ -188,13 +222,13 @@ class StripeForm extends Component {
   render() {
     const {
       additional_info,
-      disable,
-      orderComplete,
       backend_validation_errors,
-      isClient
+      disable,
+      isClient,
+      orderComplete
     } = this.state;
 
-    const { classes, stripe, width, cart } = this.props;
+    const { cart, classes, stripe, width } = this.props;
 
     const purchase = orderComplete ? (
       <p>Purchase Complete.</p>
@@ -203,7 +237,6 @@ class StripeForm extends Component {
         <Paper className={classes.paper}>
           <FormWrapper>
             <form onSubmit={e => this.handleSubmit(e)}>
-              {/* invalid quantity, price or similar errors from backend */}
               {backend_validation_errors.length > 0
                 ? backend_validation_errors
                     .filter(error => error.param === '_error')
@@ -269,33 +302,32 @@ class StripeForm extends Component {
 }
 
 const mapStateToProps = state => ({
-  cart: state.cart,
   buyItNowItem: state.buyItNow,
+  cart: state.cart,
   shippingCost: state.shippingCost
 });
 
 const mapDispatchToProps = dispatch => ({
-  clearCart: () => dispatch(clearCart()),
-  clearBuyItNow: () => dispatch(clearBuyItNow())
+  clearBuyItNow: () => dispatch(clearBuyItNow()),
+  clearCart: () => dispatch(clearCart())
 });
 
 StripeForm.propTypes = {
   buyItNowItem: PropTypes.object,
+  cart: PropTypes.array,
   classes: PropTypes.object.isRequired,
+  clearBuyItNow: PropTypes.func,
+  // eslint-disable-next-line react/no-unused-prop-types
+  clearCart: PropTypes.func,
   // eslint-disable-next-line react/no-unused-prop-types
   shippingCost: PropTypes.number,
   stripe: PropTypes.object,
-  width: PropTypes.string,
-  clearCart: PropTypes.func,
-  clearBuyItNow: PropTypes.func,
-  cart: PropTypes.array
+  width: PropTypes.string
 };
 
-export default withWidth()(
-  withStyles(styles)(
-    connect(
-      mapStateToProps,
-      mapDispatchToProps
-    )(StripeForm)
-  )
+export default withStyles(styles)(
+  connect(
+    mapStateToProps,
+    mapDispatchToProps
+  )(StripeForm)
 );

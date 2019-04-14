@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 
 import { Grid, TextField } from '@material-ui/core';
 
-import CountryPicker from './CountryPicker';
+import { SelectCountry } from './Inputs';
 import FirstNameField from './FirstNameField';
 import LastNameField from './LastNameField';
 import EmailField from './EmailField';
@@ -82,11 +82,13 @@ export default class CustomerOrderDetailForm extends React.Component {
         </Grid>
 
         <Grid item xs={12} sm={6}>
-          <CountryPicker
-            backend_validation_errors={backend_validation_errors}
+          <SelectCountry
             country={country}
             handleChange={handleChange('country')}
-            isNotValid={isNotValid}
+            error={backend_validation_errors.some(
+              err => err.param === 'additional.country'
+            )}
+            helperText={isNotValid('additional.country')}
           />
         </Grid>
         <Grid item xs={12} sm={6}>
