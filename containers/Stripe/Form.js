@@ -173,7 +173,7 @@ class StripeForm extends Component {
     if (!this.isStripesInputsOk() || stripe_errors) return;
     this.setState(() => ({ disable: true }));
     if (stripe) {
-      attemptPayment({ ...this.state, ...this.props, stripe })
+      attemptPayment({ ...this.state, ...this.props })
         .then(res => {
           // backend did not validate form
           if (res.data.errors) {
