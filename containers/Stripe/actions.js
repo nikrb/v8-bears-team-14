@@ -28,7 +28,7 @@ export const attemptPayment = ({
     .then(payload => {
       let purchaseDetails;
       if (Object.prototype.hasOwnProperty.call(buyItNowItem, 'name')) {
-        console.log('is buyitnow pirko');
+        console.log('is buyitnow pirko payload:', payload);
         purchaseDetails = {
           ...buyItNowItem,
           shippingCost,
