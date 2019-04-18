@@ -72,7 +72,7 @@ class StripeForm extends Component {
   componentDidMount() {
     this.setState({ isClient: true });
   }
-
+/* just a sec ...
   shouldComponentUpdate(nextProps, nextState) {
     const {
       first_name,
@@ -101,7 +101,7 @@ class StripeForm extends Component {
     }
     return false;
   }
-
+*/
   handleChange = name => event => {
     this.setState({
       [name]: event.target.value
@@ -196,8 +196,7 @@ class StripeForm extends Component {
         })
         .catch(err => {
           console.log('its not ok ', err.response);
-          console.log(err);
-          console.log(err.errors);
+          console.log('whole error object:', err);
 
           this.setState(() => ({ error: true }));
         });
