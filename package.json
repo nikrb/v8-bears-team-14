@@ -12,7 +12,9 @@
     "dev:auth": "concurrently \"cd authentication-server && npm start\" \"node server.js\"",
     "db:populate": "cd util/seed && node seed.js",
     "db:dropworks": "cd util/seed && node seed.js dropworks",
-    "db:dropall": "cd util/seed && node seed.js drop"
+    "db:dropall": "cd util/seed && node seed.js drop",
+    "test": "jest",
+    "test:watch": "jest --watch"
   },
   "keywords": [],
   "author": "",
@@ -67,7 +69,10 @@
     "eslint-plugin-prettier": "^3.0.1",
     "eslint-plugin-react": "^7.12.4",
     "eslint-plugin-react-hooks": "^1.5.1",
+    "jest": "^24.7.1",
+    "jest-dom": "^3.1.3",
     "prettier": "^1.16.4",
+    "react-testing-library": "^6.0.4",
     "redux-devtools": "^3.5.0"
   }
 }
