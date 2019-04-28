@@ -72,7 +72,7 @@ class StripeForm extends Component {
   componentDidMount() {
     this.setState({ isClient: true });
   }
-/* just a sec ...
+
   shouldComponentUpdate(nextProps, nextState) {
     const {
       first_name,
@@ -97,11 +97,11 @@ class StripeForm extends Component {
       city !== nextState.city ||
       additional_info !== nextState.additional_info
     ) {
-      return true;
+      return false;
     }
-    return false;
+    return true;
   }
-*/
+
   handleChange = name => event => {
     this.setState({
       [name]: event.target.value
@@ -245,7 +245,7 @@ class StripeForm extends Component {
                 <CustomerOrderDetailForm
                   handleChange={this.handleChange}
                   isNotValid={this.isNotValid}
-                  customerOrderDetail={this.state}
+                  backend_validation_errors={backend_validation_errors}
                 />
                 <StripeDetailForm
                   data={this.state}
