@@ -220,7 +220,6 @@ class StripeForm extends Component {
 
   render() {
     const {
-      additional_info,
       backend_validation_errors,
       disable,
       isClient,
