@@ -3,22 +3,19 @@ import PropTypes from 'prop-types';
 
 import { TextField } from '@material-ui/core';
 
-export default class PhoneField extends React.Component {
-  static propTypes = {
-    handleChange: PropTypes.func
-  };
+const PhoneField = ({ handleChange }) => (
+  <TextField
+    id="phone"
+    label="Phone number (optional)"
+    type="tel"
+    onChange={handleChange}
+    margin="dense"
+    fullWidth
+  />
+);
 
-  render() {
-    const { handleChange } = this.props;
-    return (
-      <TextField
-        id="phone"
-        label="Phone number (optional)"
-        type="tel"
-        onChange={handleChange}
-        margin="dense"
-        fullWidth
-      />
-    );
-  }
-}
+PhoneField.propTypes = {
+  handleChange: PropTypes.func
+};
+
+export default PhoneField;
