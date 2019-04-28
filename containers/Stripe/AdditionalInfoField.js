@@ -5,12 +5,11 @@ import { TextField } from '@material-ui/core';
 
 export default class AdditionalInfoField extends React.Component {
   static propTypes = {
-    handleChange: PropTypes.func,
-    value: PropTypes.string
+    handleChange: PropTypes.func
   };
 
   render() {
-    const { handleChange, value } = this.props;
+    const { handleChange } = this.props;
     return (
       <TextField
         fullWidth
@@ -19,11 +18,10 @@ export default class AdditionalInfoField extends React.Component {
         label="Additional information (optional)"
         margin="dense"
         multiline
-        onChange={handleChange}
+        onChange={handleChange('additional_info')}
         placeholder="Anything else you would like to add"
         rows={4}
         type="text"
-        value={value}
       />
     );
   }

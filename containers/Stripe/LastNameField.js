@@ -8,17 +8,11 @@ class LastNameField extends React.Component {
   static propTypes = {
     backend_validation_errors: PropTypes.array,
     handleChange: PropTypes.func,
-    isNotValid: PropTypes.func,
-    value: PropTypes.string
+    isNotValid: PropTypes.func
   };
 
   render() {
-    const {
-      backend_validation_errors,
-      handleChange,
-      isNotValid,
-      value
-    } = this.props;
+    const { backend_validation_errors, handleChange, isNotValid } = this.props;
     return (
       <TextField
         id="last_name"
@@ -28,7 +22,6 @@ class LastNameField extends React.Component {
         margin="dense"
         fullWidth
         required
-        value={value}
         error={backend_validation_errors.some(
           err => err.param === 'additional.last_name'
         )}

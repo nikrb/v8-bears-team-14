@@ -8,24 +8,17 @@ class FirstNameField extends React.Component {
   static propTypes = {
     backend_validation_errors: PropTypes.array,
     handleChange: PropTypes.func,
-    isNotValid: PropTypes.func,
-    value: PropTypes.string
+    isNotValid: PropTypes.func
   };
 
   render() {
-    const {
-      backend_validation_errors,
-      handleChange,
-      isNotValid,
-      value
-    } = this.props;
+    const { backend_validation_errors, handleChange, isNotValid } = this.props;
     return (
       <TextField
         id="first_name"
         label="First name"
         type="text"
         onChange={handleChange}
-        value={value}
         margin="dense"
         required
         fullWidth

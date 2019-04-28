@@ -20,18 +20,7 @@ export default class CustomerOrderDetailForm extends React.Component {
   };
 
   render() {
-    const { customerOrderDetail, handleChange, isNotValid } = this.props;
-    const {
-      backend_validation_errors,
-      city,
-      country,
-      first_name,
-      last_name,
-      email,
-      phone,
-      address1,
-      address2
-    } = customerOrderDetail;
+    const { backend_validation_errors, handleChange, isNotValid } = this.props;
     return (
       <React.Fragment>
         <Grid item xs={12} sm={6}>
@@ -39,7 +28,6 @@ export default class CustomerOrderDetailForm extends React.Component {
             backend_validation_errors={backend_validation_errors}
             handleChange={handleChange('first_name')}
             isNotValid={isNotValid}
-            value={first_name}
           />
         </Grid>
         <Grid item xs={12} sm={6}>
@@ -47,7 +35,6 @@ export default class CustomerOrderDetailForm extends React.Component {
             backend_validation_errors={backend_validation_errors}
             handleChange={handleChange('last_name')}
             isNotValid={isNotValid}
-            value={last_name}
           />
         </Grid>
         <Grid item xs={12} sm={6}>
@@ -55,18 +42,16 @@ export default class CustomerOrderDetailForm extends React.Component {
             backend_validation_errors={backend_validation_errors}
             handleChange={handleChange('email')}
             isNotValid={isNotValid}
-            value={email}
           />
         </Grid>
         <Grid item xs={12} sm={6}>
-          <PhoneField handleChange={handleChange('phone')} value={phone} />
+          <PhoneField handleChange={handleChange('phone')} />
         </Grid>
         <Grid item xs={12}>
           <AddressField
             backend_validation_errors={backend_validation_errors}
             handleChange={handleChange('address1')}
             isNotValid={isNotValid}
-            value={address1}
           />
         </Grid>
         <Grid item xs={12}>
@@ -77,13 +62,10 @@ export default class CustomerOrderDetailForm extends React.Component {
             onChange={handleChange('address2')}
             margin="dense"
             fullWidth
-            value={address2}
           />
         </Grid>
-
         <Grid item xs={12} sm={6}>
           <SelectCountry
-            country={country}
             handleChange={handleChange('country')}
             error={backend_validation_errors.some(
               err => err.param === 'additional.country'
@@ -96,7 +78,6 @@ export default class CustomerOrderDetailForm extends React.Component {
             backend_validation_errors={backend_validation_errors}
             handleChange={handleChange('city')}
             isNotValid={isNotValid}
-            value={city}
           />
         </Grid>
       </React.Fragment>

@@ -252,10 +252,7 @@ class StripeForm extends Component {
                   handleStripeChange={this.handleStripeChange}
                 />
                 <Grid item xs={12}>
-                  <AdditionalInfoField
-                    handleChange={this.handleChange('additional_info')}
-                    value={additional_info}
-                  />
+                  <AdditionalInfoField handleChange={this.handleChange} />
                 </Grid>
               </Grid>
               <br />

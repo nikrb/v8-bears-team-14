@@ -5,12 +5,11 @@ import { TextField } from '@material-ui/core';
 
 export default class PhoneField extends React.Component {
   static propTypes = {
-    handleChange: PropTypes.func,
-    value: PropTypes.string
+    handleChange: PropTypes.func
   };
 
   render() {
-    const { handleChange, value } = this.props;
+    const { handleChange } = this.props;
     return (
       <TextField
         id="phone"
@@ -19,7 +18,6 @@ export default class PhoneField extends React.Component {
         onChange={handleChange}
         margin="dense"
         fullWidth
-        value={value}
       />
     );
   }
